@@ -1,4 +1,4 @@
-CREATE gutPayments
+CREATE TABLE gutPayments
 ( idPayment integer primary key
 , shortref varchar (3)
 , payment varchar(100)

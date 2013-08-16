@@ -1,0 +1,580 @@
+object DM_ITEMS: TDM_ITEMS
+  OnCreate = DataModuleCreate
+  OldCreateOrder = False
+  Height = 551
+  HorizontalOffset = 501
+  VerticalOffset = 119
+  Width = 416
+  object tbItems: TRxMemoryData
+    FieldDefs = <    
+      item
+        Name = 'idItem'
+        DataType = ftInteger
+        Precision = -1
+        Size = 0
+      end    
+      item
+        Name = 'itemDate'
+        DataType = ftDateTime
+        Precision = -1
+        Size = 0
+      end    
+      item
+        Name = 'itemIn'
+        DataType = ftFloat
+        Precision = 2
+        Size = 0
+      end    
+      item
+        Name = 'itemOut'
+        DataType = ftFloat
+        Precision = 2
+        Size = 0
+      end    
+      item
+        Name = 'itemClosed'
+        DataType = ftInteger
+        Precision = -1
+        Size = 0
+      end    
+      item
+        Name = 'itemVisible'
+        DataType = ftInteger
+        Precision = -1
+        Size = 0
+      end    
+      item
+        Name = 'itemBalance'
+        DataType = ftFloat
+        Precision = 2
+        Size = 0
+      end    
+      item
+        Name = 'refPayment'
+        DataType = ftInteger
+        Precision = -1
+        Size = 0
+      end    
+      item
+        Name = 'payment'
+        DataType = ftString
+        Precision = -1
+        Size = 100
+      end    
+      item
+        Name = 'shortRef'
+        DataType = ftString
+        Precision = -1
+        Size = 3
+      end    
+      item
+        Name = 'ItemDescription'
+        DataType = ftString
+        Precision = 0
+        Size = 500
+      end>
+    AfterInsert = tbItemsAfterInsert
+    PacketRecords = 0
+    left = 48
+    top = 40
+    object tbItemsidItem: TLongintField
+      DisplayWidth = 10
+      FieldKind = fkData
+      FieldName = 'idItem'
+      Index = 0
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+    end
+    object tbItemsitemDate: TDateTimeField
+      DisplayWidth = 10
+      FieldKind = fkData
+      FieldName = 'itemDate'
+      Index = 1
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+    end
+    object tbItemsitemIn: TFloatField
+      DisplayWidth = 10
+      FieldKind = fkData
+      FieldName = 'itemIn'
+      Index = 2
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Currency = True
+      MaxValue = 0
+      MinValue = 0
+      Precision = 2
+    end
+    object tbItemsitemOut: TFloatField
+      DisplayWidth = 10
+      FieldKind = fkData
+      FieldName = 'itemOut'
+      Index = 3
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Currency = True
+      MaxValue = 0
+      MinValue = 0
+      Precision = 2
+    end
+    object tbItemsitemClosed: TLongintField
+      DisplayWidth = 10
+      FieldKind = fkData
+      FieldName = 'itemClosed'
+      Index = 4
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+    end
+    object tbItemsitemVisible: TLongintField
+      DisplayWidth = 10
+      FieldKind = fkData
+      FieldName = 'itemVisible'
+      Index = 5
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+    end
+    object tbItemsitemBalance: TFloatField
+      DisplayWidth = 10
+      FieldKind = fkData
+      FieldName = 'itemBalance'
+      Index = 6
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Currency = True
+      MaxValue = 0
+      MinValue = 0
+      Precision = 2
+    end
+    object tbItemsrefPayment: TLongintField
+      DisplayWidth = 10
+      FieldKind = fkData
+      FieldName = 'refPayment'
+      Index = 7
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+    end
+    object tbItemspayment: TStringField
+      DisplayWidth = 100
+      FieldKind = fkData
+      FieldName = 'payment'
+      Index = 8
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 100
+    end
+    object tbItemsshortRef: TStringField
+      DisplayWidth = 3
+      FieldKind = fkData
+      FieldName = 'shortRef'
+      Index = 9
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 3
+    end
+    object tbItemsItemDescription: TStringField
+      DisplayWidth = 500
+      FieldKind = fkData
+      FieldName = 'ItemDescription'
+      Index = 10
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 500
+    end
+  end
+  object qPreviousBalance: TZQuery
+    Connection = DM_GENERAL.Cnx_General
+    SQL.Strings = (
+      'SELECT SUM (itemIn) as income'
+      '           , SUM (itemOut) as outcome'
+      '           ,(SUM (itemIn) - SUM (itemOut)) as balance '
+      '           ,refPayment'
+      '           ,Payment'
+      'FROM items'
+      '           Left join gutPayments ON idPayment = refPayment'
+      'WHERE (ItemVisible = 1)'
+      '            and (itemDate < :itemDate)'
+      'GROUP By refPayment'
+    )
+    Params = <    
+      item
+        DataType = ftDateTime
+        Name = 'itemDate'
+        ParamType = ptInput
+      end>
+    left = 176
+    top = 128
+    ParamData = <    
+      item
+        DataType = ftDateTime
+        Name = 'itemDate'
+        ParamType = ptInput
+      end>
+  end
+  object tbBalance: TRxMemoryData
+    Active = True
+    FieldDefs = <    
+      item
+        Name = 'refPayment'
+        DataType = ftInteger
+        Precision = -1
+        Size = 0
+      end    
+      item
+        Name = 'Payment'
+        DataType = ftString
+        Precision = -1
+        Size = 100
+      end    
+      item
+        Name = 'Income'
+        DataType = ftFloat
+        Precision = 2
+        Size = 0
+      end    
+      item
+        Name = 'Outcome'
+        DataType = ftFloat
+        Precision = 2
+        Size = 0
+      end    
+      item
+        Name = 'Balance'
+        DataType = ftFloat
+        Precision = 2
+        Size = 0
+      end>
+    AfterInsert = tbBalanceAfterInsert
+    PacketRecords = 0
+    left = 176
+    top = 32
+    object tbBalancerefPayment: TLongintField
+      DisplayWidth = 10
+      FieldKind = fkData
+      FieldName = 'refPayment'
+      Index = 0
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+    end
+    object tbBalancePayment: TStringField
+      DisplayWidth = 100
+      FieldKind = fkData
+      FieldName = 'Payment'
+      Index = 1
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 100
+    end
+    object tbBalanceIncome: TFloatField
+      DisplayWidth = 10
+      FieldKind = fkData
+      FieldName = 'Income'
+      Index = 2
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Currency = True
+      MaxValue = 0
+      MinValue = 0
+      Precision = 2
+    end
+    object tbBalanceOutcome: TFloatField
+      DisplayWidth = 10
+      FieldKind = fkData
+      FieldName = 'Outcome'
+      Index = 3
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Currency = True
+      MaxValue = 0
+      MinValue = 0
+      Precision = 2
+    end
+    object tbBalanceBalance: TFloatField
+      DisplayWidth = 10
+      FieldKind = fkData
+      FieldName = 'Balance'
+      Index = 4
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Currency = True
+      MaxValue = 0
+      MinValue = 0
+      Precision = 2
+    end
+  end
+  object qItemsDate: TZQuery
+    Connection = DM_GENERAL.Cnx_General
+    SQL.Strings = (
+      'SELECT idItem '
+      '            ,itemDate'
+      '            ,itemDescription'
+      '            ,ItemIn'
+      '            ,ItemOut      '
+      '            ,(itemIn - itemOut) as ItemBalance'
+      '           ,refPayment'
+      '           , itemClosed  '
+      '           ,Payment'
+      '           ,shortref'
+      'FROM items'
+      '           Left join gutPayments ON idPayment = refPayment'
+      'WHERE (itemVisible = 1)'
+      '            and (itemDate = :itemDate)'
+      'ORDER BY idItem'
+    )
+    Params = <    
+      item
+        DataType = ftDateTime
+        Name = 'itemDate'
+        ParamType = ptInput
+      end>
+    left = 48
+    top = 128
+    ParamData = <    
+      item
+        DataType = ftDateTime
+        Name = 'itemDate'
+        ParamType = ptInput
+      end>
+  end
+  object qItemInsert: TZQuery
+    Connection = DM_GENERAL.Cnx_General
+    SQL.Strings = (
+      'INSERT INTO Items'
+      '( itemDate, itemDescription, itemIn, itemOut '
+      ', refPayment)'
+      'VALUES'
+      '( :itemDate, :itemDescription, :itemIn, :itemOut'
+      ', :refPayment)'
+    )
+    Params = <    
+      item
+        DataType = ftUnknown
+        Name = 'itemDate'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'itemDescription'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'itemIn'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'itemOut'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'refPayment'
+        ParamType = ptUnknown
+      end>
+    left = 48
+    top = 215
+    ParamData = <    
+      item
+        DataType = ftUnknown
+        Name = 'itemDate'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'itemDescription'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'itemIn'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'itemOut'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'refPayment'
+        ParamType = ptUnknown
+      end>
+  end
+  object qItemEdit: TZQuery
+    Connection = DM_GENERAL.Cnx_General
+    SQL.Strings = (
+      'UPDATE Items'
+      'SET '
+      '  itemDate = :itemDate'
+      ', itemDescription = :itemDescription '
+      ', itemIn = :itemIn '
+      ', itemOut = :itemOut '
+      ', refPayment = :refPayment '
+      ', itemClosed = :itemClosed'
+      ', itemVisible = :itemVisible'
+      'WHERE (idItem = :idItem)'
+    )
+    Params = <    
+      item
+        DataType = ftUnknown
+        Name = 'itemDate'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'itemDescription'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'itemIn'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'itemOut'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'refPayment'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'itemClosed'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'itemVisible'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'idItem'
+        ParamType = ptUnknown
+      end>
+    left = 48
+    top = 280
+    ParamData = <    
+      item
+        DataType = ftUnknown
+        Name = 'itemDate'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'itemDescription'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'itemIn'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'itemOut'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'refPayment'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'itemClosed'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'itemVisible'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'idItem'
+        ParamType = ptUnknown
+      end>
+  end
+  object qItemDel: TZQuery
+    Connection = DM_GENERAL.Cnx_General
+    SQL.Strings = (
+      'UPDATE Items'
+      'SET itemVisible = 0'
+      'WHERE (idItem = :idItem)'
+    )
+    Params = <    
+      item
+        DataType = ftUnknown
+        Name = 'idItem'
+        ParamType = ptUnknown
+      end>
+    left = 48
+    top = 344
+    ParamData = <    
+      item
+        DataType = ftUnknown
+        Name = 'idItem'
+        ParamType = ptUnknown
+      end>
+  end
+  object qItemClose: TZQuery
+    Connection = DM_GENERAL.Cnx_General
+    SQL.Strings = (
+      'UPDATE Items'
+      'SET itemClosed = 1'
+      'WHERE (itemDate = :itemDate)'
+      '            and (itemVisible = 1)'
+      '            and (itemClosed = 0)'
+    )
+    Params = <    
+      item
+        DataType = ftUnknown
+        Name = 'itemDate'
+        ParamType = ptUnknown
+      end>
+    left = 48
+    top = 424
+    ParamData = <    
+      item
+        DataType = ftUnknown
+        Name = 'itemDate'
+        ParamType = ptUnknown
+      end>
+  end
+end

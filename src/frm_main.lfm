@@ -1,10 +1,10 @@
 object frmMain: TfrmMain
-  Left = 343
-  Height = 765
-  Top = 43
+  Left = 301
+  Height = 695
+  Top = 84
   Width = 864
   Caption = 'Boxer - Control de caja'
-  ClientHeight = 746
+  ClientHeight = 676
   ClientWidth = 864
   Font.CharSet = ANSI_CHARSET
   Font.Color = clBlack
@@ -13,14 +13,20 @@ object frmMain: TfrmMain
   Font.Pitch = fpVariable
   Font.Quality = fqDraft
   Menu = MainMenu1
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
   Position = poScreenCenter
   LCLVersion = '1.0.4.0'
-  object StatusBar1: TStatusBar
+  object stInfo: TStatusBar
     Left = 0
     Height = 20
-    Top = 726
+    Top = 656
     Width = 864
-    Panels = <>
+    Panels = <    
+      item
+        Width = 500
+      end>
+    SimplePanel = False
   end
   object ToolBar1: TToolBar
     Left = 0
@@ -61,15 +67,75 @@ object frmMain: TfrmMain
       Caption = 'ToolButton4'
       Style = tbsSeparator
     end
+    object ToolButton5: TToolButton
+      Left = 159
+      Top = 2
+      Action = itemNew
+    end
+    object ToolButton6: TToolButton
+      Left = 271
+      Top = 2
+      Action = itemEdit
+    end
+    object ToolButton7: TToolButton
+      Left = 382
+      Top = 2
+      Width = 10
+      Caption = 'ToolButton7'
+      Style = tbsSeparator
+    end
   end
   object DBGrid1: TDBGrid
     Left = 0
-    Height = 510
+    Height = 440
     Top = 216
     Width = 864
     Align = alClient
+    AutoFillColumns = True
     Color = clWindow
-    Columns = <>
+    Columns = <    
+      item
+        SizePriority = 0
+        Title.Alignment = taCenter
+        Title.Caption = 'Fecha'
+        FieldName = 'itemDate'
+        DisplayFormat = 'dd/mm/yyyy'
+      end    
+      item
+        Title.Alignment = taCenter
+        Title.Caption = 'Descripción'
+        Width = 292
+        FieldName = 'ItemDescription'
+      end    
+      item
+        SizePriority = 0
+        Title.Alignment = taCenter
+        Title.Caption = 'Ingreso'
+        Width = 120
+        FieldName = 'itemIn'
+      end    
+      item
+        SizePriority = 0
+        Title.Alignment = taCenter
+        Title.Caption = 'Egreso'
+        Width = 120
+        FieldName = 'itemOut'
+      end    
+      item
+        SizePriority = 0
+        Title.Alignment = taCenter
+        Title.Caption = 'Forma de pago'
+        Width = 200
+        FieldName = 'payment'
+      end    
+      item
+        ButtonStyle = cbsCheckboxColumn
+        SizePriority = 0
+        Title.Alignment = taCenter
+        Title.Caption = 'Cerrado'
+        FieldName = 'itemClosed'
+      end>
+    DataSource = ds_Items
     FixedCols = 0
     Options = [dgTitles, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
     Scrollbars = ssAutoVertical
@@ -87,14 +153,288 @@ object frmMain: TfrmMain
     Top = 68
     Width = 864
     Align = alTop
+    ClientHeight = 148
+    ClientWidth = 864
     TabOrder = 3
+    object edPreviousBalance: TLabeledEdit
+      Left = 664
+      Height = 40
+      Top = 25
+      Width = 192
+      Alignment = taRightJustify
+      Anchors = [akTop, akRight, akBottom]
+      Color = clSkyBlue
+      EditLabel.AnchorSideLeft.Control = edPreviousBalance
+      EditLabel.AnchorSideRight.Control = edPreviousBalance
+      EditLabel.AnchorSideRight.Side = asrBottom
+      EditLabel.AnchorSideBottom.Control = edPreviousBalance
+      EditLabel.Left = 664
+      EditLabel.Height = 17
+      EditLabel.Top = 5
+      EditLabel.Width = 192
+      EditLabel.Caption = 'Saldo anterior'
+      EditLabel.ParentColor = False
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -24
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      Font.Style = [fsBold]
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 1
+      TabStop = False
+    end
+    object edBalance: TLabeledEdit
+      Left = 664
+      Height = 40
+      Top = 97
+      Width = 192
+      Alignment = taRightJustify
+      Anchors = [akTop, akRight, akBottom]
+      Color = clMoneyGreen
+      EditLabel.AnchorSideLeft.Control = edBalance
+      EditLabel.AnchorSideRight.Control = edBalance
+      EditLabel.AnchorSideRight.Side = asrBottom
+      EditLabel.AnchorSideBottom.Control = edBalance
+      EditLabel.Left = 664
+      EditLabel.Height = 17
+      EditLabel.Top = 77
+      EditLabel.Width = 192
+      EditLabel.Caption = 'Saldo actual'
+      EditLabel.ParentColor = False
+      Font.CharSet = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -24
+      Font.Name = 'Arial'
+      Font.Pitch = fpVariable
+      Font.Quality = fqDraft
+      Font.Style = [fsBold]
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 0
+      TabStop = False
+    end
+    object edDescription: TLabeledEdit
+      Left = 16
+      Height = 24
+      Top = 28
+      Width = 632
+      EditLabel.AnchorSideLeft.Control = edDescription
+      EditLabel.AnchorSideRight.Control = edDescription
+      EditLabel.AnchorSideRight.Side = asrBottom
+      EditLabel.AnchorSideBottom.Control = edDescription
+      EditLabel.Left = 16
+      EditLabel.Height = 17
+      EditLabel.Top = 8
+      EditLabel.Width = 632
+      EditLabel.Caption = 'Descripción'
+      EditLabel.ParentColor = False
+      TabOrder = 2
+    end
+    object edItemIn: TLabeledEdit
+      Left = 18
+      Height = 24
+      Top = 104
+      Width = 118
+      EditLabel.AnchorSideLeft.Control = edItemIn
+      EditLabel.AnchorSideRight.Control = edItemIn
+      EditLabel.AnchorSideRight.Side = asrBottom
+      EditLabel.AnchorSideBottom.Control = edItemIn
+      EditLabel.Left = 18
+      EditLabel.Height = 17
+      EditLabel.Top = 84
+      EditLabel.Width = 118
+      EditLabel.Caption = 'Ingreso'
+      EditLabel.ParentColor = False
+      TabOrder = 3
+    end
+    object edItemOut: TLabeledEdit
+      Left = 152
+      Height = 24
+      Top = 104
+      Width = 112
+      EditLabel.AnchorSideLeft.Control = edItemOut
+      EditLabel.AnchorSideRight.Control = edItemOut
+      EditLabel.AnchorSideRight.Side = asrBottom
+      EditLabel.AnchorSideBottom.Control = edItemOut
+      EditLabel.Left = 152
+      EditLabel.Height = 17
+      EditLabel.Top = 84
+      EditLabel.Width = 112
+      EditLabel.Caption = 'Egreso'
+      EditLabel.ParentColor = False
+      TabOrder = 4
+    end
+    object cbPayment: TComboBox
+      Left = 280
+      Height = 24
+      Top = 104
+      Width = 238
+      ItemHeight = 16
+      TabOrder = 5
+      Text = 'cbPayment'
+    end
+    object Label1: TLabel
+      Left = 280
+      Height = 17
+      Top = 83
+      Width = 90
+      Caption = 'Forma de Pago'
+      ParentColor = False
+    end
+    object btnSave: TBitBtn
+      Left = 528
+      Height = 78
+      Top = 63
+      Width = 120
+      Action = itemSave
+      Glyph.Data = {
+        36100000424D3610000000000000360000002800000020000000200000000100
+        2000000000000010000064000000640000000000000000000000000000000000
+        00030000000F00000015000000150000000C0000000600000006000000060000
+        0006000000060000000600000006000000060000000600000006000000060000
+        0006000000060000000600000006000000060000000600000006000000060000
+        00060000000C00000012000000150000000C0000000000000000000000030606
+        062F11111187131313A6131313A309090983000000610000005C0000005C0000
+        005C0000005C0000005C0000005C0000005C0000005C0000005C0000005C0000
+        005C0000005C0000005C0000005C0000005C0000005C0000005C0000005C0000
+        005F0707077A1010109B121212A30E0E0E7D03030323000000030000000F1212
+        1285353535F23D3D3DFB3C3C3CFD3D3D3DFB414141F5414141F4414141F44141
+        41F4414141F4414141F4414141F4414141F4414141F4414141F4404040F43F3F
+        3FF43E3E3EF53E3E3EF53D3D3DF53D3D3DF53D3D3DF53C3C3CF53B3B3BF53A3A
+        3AF5363636F93B3B3BFC3D3D3DFB303030F00A0A0A710000000C000000151414
+        14A0303030F8262626FC3B3B3BFF848484FFCACACAFFCECECEFFCECECEFFCECE
+        CEFFCECECEFFCECECEFFCECECEFFCECECEFFCDCDCDFFCBCBCBFFC8C8C8FFC5C5
+        C5FFC2C2C2FFBFBFBFFFBCBCBCFFBABABAFFB8B8B8FFB6B6B6FFB4B4B4FFACAC
+        ACFF737373FF373737FF303030FC373737F90B0B0B8F00000012000000171313
+        13A9343434FC303030FF353636FF989898FFF8F8F8FFFEFEFEFFFEFEFEFFFEFE
+        FEFFFEFEFEFFFEFEFEFFFEFEFEFFFDFEFEFFFCFCFCFFF9F9F9FFF5F5F5FFF2F2
+        F2FFEEEEEEFFEAEBEBFFE7E7E7FFE4E4E4FFE0E0E0FFDCDDDDFFD9D9D9FFD0D0
+        D0FF7D7D7DFF313231FF353535FF343434FC0A0A0A9500000012000000171212
+        12AD343434FE2F2F2FFF2B2B2BFF969696FFF8F8F8FFFCFAF8FFFAF7F4FFFBF7
+        F4FFFBF7F4FFFBF7F4FFFBF7F4FFFAF7F4FFF9F6F3FFF8F4F1FFF4F0EEFFF1ED
+        EBFFEEEAE7FFEAE6E4FFE7E3E0FFE4E0DDFFE0DDDAFFDDD9D7FFDBD9D8FFD3D3
+        D3FF797979FF202020FF262626FF2B2B2BFD0A0A0A9700000012000000171212
+        12B0323232FE282929FF2A2A2AFF969696FFF8F7F6FFEAD7C6FFD3A377FFD5A9
+        80FFD5A980FFD5A980FFD5A980FFD5A980FFD5A980FFD5A980FFD5A880FFD2A6
+        7EFFD2A57DFFCFA37BFFD0A57FFFCEA47EFFCDA27DFFCBA17CFFD8CEC7FFD6D6
+        D6FF7B7B7CFF1B1B1BFF1D1D1DFF282828FD0A0A0A9700000012000000171212
+        12B0333333FE2A2B2BFF2B2B2BFF969797FFF8F8F8FFF7F0ECFFF1E4D9FFF3E7
+        DEFFF3E7DEFFF3E7DEFFF3E7DEFFF3E7DEFFF3E7DEFFF3E7DEFFF2E6DEFFF0E5
+        DCFFECE1D9FFE9DED6FFE5D6CBFFE2D4C7FFDFD1C4FFDCCEC3FFDFDCDAFFD8D8
+        D8FF7D7D7DFF1C1C1CFF1E1E1EFF282828FD0A0A0A9700000012000000171313
+        13B0333333FE2C2C2CFF2D2D2DFF969696FFF7F7F7FFFCFAF8FFF1E3D7FFF4E9
+        E0FFF4E9E0FFF4E9E0FFF7EFE9FFF7EFE9FFF7EFE9FFF7EFE9FFF6EFE9FFF8F5
+        F2FFF6F3F0FFF3EFECFFEFEBE9FFECE8E6FFE8E5E2FFE5E2E0FFE4E3E2FFDBDB
+        DBFF7F7F7FFF1C1C1CFF1E1E1EFF282828FD0A0A0A9700000012000000171313
+        13B0343434FE2D2D2DFF2E2E2EFF969696FFF5F4F3FFEEE1D7FFD2A073FFD7AC
+        86FFD7AC86FFD7AC86FFD5A880FFD5A880FFD5A880FFD5A880FFD5A880FFD4A4
+        7AFFD3A47AFFD2A379FFD1A277FFCFA076FFCE9F74FFCD9F75FFE1DAD4FFDEDF
+        DFFF808080FF1C1C1CFF1E1E1EFF282828FD0A0A0A9700000012000000171313
+        13B0363636FE2F2F2FFF303030FF959595FFF2F2F2FFF6F3EFFFF5EEE9FFF5EF
+        E9FFF6EFE9FFF6EFE9FFF6EFE9FFF6EFE9FFF6EFE9FFF6EFE9FFF6EFE9FFF6EF
+        E9FFF6EFE9FFF4EEE8FFF1EBE5FFEEE7E2FFEBE4DFFFE8E2DDFFE9E6E5FFE1E1
+        E1FF828282FF1C1C1CFF1E1E1EFF282828FD0A0A0A9700000012000000171313
+        13B0393939FE323232FF323232FF939393FFEFEFEFFFF7F7F6FFF4ECE4FFF9F4
+        EFFFF9F4F0FFF9F4F0FFF9F4F0FFF9F4F0FFF9F4F0FFF9F4F0FFF9F4F0FFF9F4
+        F0FFF9F4F0FFF9F4EFFFF4ECE4FFF1E8E1FFEDE6DEFFEAE3DBFFEDECECFFE5E5
+        E5FF858585FF1C1D1CFF1E1E1EFF282828FD0A0A0A9700000012000000171414
+        14B03B3B3BFE363636FF363536FF939393FFECEBEBFFEADDD5FFD19E71FFD6AB
+        83FFD7AC84FFD7AC84FFD7AC84FFD7AC84FFD7AC84FFD7AC84FFD7AC84FFD7AC
+        84FFD7AC84FFD7AC84FFD9B08AFFD7AE8AFFD6AC88FFD5AC88FFE8E0D9FFE8E8
+        E8FF888888FF1D1D1DFF1E1E1EFF282828FD0A0A0A9700000012000000171414
+        14B03C3C3CFE383838FF373737FF929292FFE9E9E8FFEBE4DFFFE9DDD4FFECE0
+        D6FFEFE2D9FFF0E3DAFFF0E4DAFFF0E4DAFFF0E4DAFFF0E4DAFFF0E4DAFFF0E4
+        DAFFF0E4DAFFF0E4DAFFF0E4DAFFF0E3DAFFEEE1D8FFEBDFD6FFEEE9E5FFEBEB
+        EBFF8A8A8AFF1E1E1EFF1E1E1EFF282828FD0A0A0A9700000012000000171414
+        14B03E3E3EFE3A3A3AFF393838FF909090FFE7E7E7FFEFF0F0FFF3F4F4FFF7F7
+        F7FFFAFBFBFFFDFDFEFFFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFEFFFDFDFEFFFAFBFBFFF7F7F7FFEEEE
+        EEFF8C8C8CFF1F1F1FFF202020FF282828FD0A0A0A9700000012000000171414
+        14B03F3F3FFE3C3C3CFF3A3A3AFF909090FFE5E5E5FFEEEEEEFFF1F1F1FFF4F4
+        F4FFF8F8F8FFFCFCFCFFFEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+        FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFEFFFDFDFDFFFBFBFBFFF2F2
+        F2FF8F8F8FFF202020FF202020FF292929FD0A0A0A9700000012000000171515
+        15B0414041FE3E3E3EFF3B3B3BFF7F7F7FFFC3C3C3FFCACACAFFCDCDCDFFD0D0
+        D0FFD5D5D5FFD8D8D8FFDBDBDBFFDCDCDCFFDCDCDCFFDCDCDCFFDCDCDCFFDCDC
+        DCFFDCDCDCFFDCDCDCFFDCDCDCFFDCDCDCFFDCDCDCFFDCDCDCFFDBDBDBFFD4D4
+        D4FF7F7F7FFF202020FF212121FF292929FD0A0A0A9700000012000000171515
+        15B0424242FE404040FF3B3B3BFF4A494AFF595959FF5A5A5AFF5A5A5AFF5B5B
+        5BFF5D5D5DFF5D5D5DFF5D5D5DFF5C5C5CFF5B5B5BFF5B5B5BFF5A5A5AFF5959
+        59FF585858FF585858FF575757FF565656FF555555FF545454FF545454FF5151
+        51FF393939FF1D1D1DFF232323FF2A2A2AFD0A0A0A9700000012000000171515
+        15B0434343FE424242FF3E3E3EFF3D3C3DFF3A3A3AFF393939FF373737FF3636
+        36FF353535FF343434FF323232FF2F2F2FFF2D2D2DFF2C2C2CFF2B2B2BFF2929
+        29FF282828FF272727FF252525FF242424FF232323FF212121FF1F1F1FFF1D1D
+        1DFF1D1D1DFF1D1C1CFF232323FF2B2B2AFD0A0A0A9700000012000000171515
+        15B0444444FE4A4A4AFF4C4C4CFF4D4D4DFF4B4B4BFF474747FF454545FF4444
+        44FF424242FF424242FF414141FF3E3E3EFF3C3C3CFF3B3B3BFF3B3A3AFF393A
+        39FF393838FF373737FF363636FF353535FF353535FF353535FF2E2E2EFF2222
+        22FF1F1F1FFF1D1D1DFF242424FF2B2B2BFD0A0A0A9700000012000000171515
+        15B0474747FE535353FF484848FF404040FF454545FF727272FF898989FF8585
+        85FF828282FF7F7F7FFF7B7B7BFF777777FF747474FF737373FF727272FF7272
+        71FF717171FF707070FF6F6F6FFF6E6E6EFF6B6B6BFF5A5A5AFF424242FF2727
+        28FF1F201FFF1E1E1EFF252525FF2B2B2BFD0A0A0A9700000012000000171616
+        16B0484848FE545454FF3B3B3BFF2E2E2EFF444444FFBFBFBFFFF2F2F2FFEAEA
+        EAFFE4E4E4FFDDDDDDFFD1D1D1FFC7C7C7FFC1C1C1FFBEBEBEFFB9B9B9FF9A9A
+        9AFF838383FF828282FF808080FF919191FFAFAFAFFF848484FF444444FF2929
+        29FF202020FF1F1F1FFF262626FF2B2B2BFD0A0A0A9700000012000000171616
+        16AF4A4A4AFE555555FF3C3C3CFF2F2F2FFF474747FFCACACAFFFBFBFBFFF6F6
+        F6FFF0F0F0FFEAEAEAFFDFDFDFFFD1D1D1FFC9C9C9FFC5C5C5FFBDBDBDFF6E6E
+        6EFF383838FF3B3B3BFF393939FF646464FFB6B6B6FF8E8E8EFF454545FF2929
+        29FF212121FF1F1F1FFF262626FF2C2B2CFD0B0A0A9700000012000000171616
+        16AF4B4B4BFE575757FF3D3D3DFF2F3030FF474747FFC6C6C6FFF7F7F7FFF4F4
+        F4FFF1F1F1FFEDEDEDFFE5E5E5FFD8D8D8FFCDCDCDFFC8C8C8FFBEBEBEFF6C6C
+        6CFF363636FF3A3A3AFF393939FF636363FFB7B7B7FF909090FF454545FF2A2A
+        2AFF212222FF202020FF272727FF2C2C2CFD0B0A0B9700000012000000171515
+        15AF4B4B4BFE585858FF3F3F3EFF303130FF464646FFC2C2C2FFF2F2F2FFF1F1
+        F1FFF0F0F0FFEEEEEEFFE9E9E9FFDFDFDFFFD2D2D2FFCBCBCBFFC0C0C0FF6D6D
+        6DFF383838FF3C3C3CFF3A3A3AFF646464FFB9B9B9FF929292FF464646FF2A2A
+        2BFF222222FF212121FF272727FF2C2C2CFD0B0B0B9700000012000000171515
+        15AF4D4C4DFE595959FF3F3F3FFF313131FF474747FFC0C0C0FFEEEFEEFFEDED
+        EDFFEEEEEEFFEEEEEEFFEBEBEBFFE5E5E5FFD9D9D9FFD1D1D1FFC4C4C4FF6F6F
+        6FFF383838FF3C3C3CFF3A3A3AFF656565FFBBBBBBFF949494FF464646FF2B2B
+        2BFF222322FF212121FF282828FF2D2D2DFD0B0B0B9700000012000000171515
+        15AF4E4E4EFE5B5B5BFF404040FF323232FF474747FFBEBEBEFFEBEBEBFFEAEA
+        EAFFEBEBEBFFECECECFFECECEBFFE8E8E8FFDFDFDFFFD7D7D7FFC9C9C9FF7171
+        71FF383838FF3C3C3CFF3A3B3BFF656565FFBDBDBDFF969696FF474747FF2B2B
+        2BFF232323FF222222FF282828FF2D2D2DFD0B0B0B9700000012000000171515
+        15AD515151FE5F5F5FFF414141FF333333FF474747FFBCBCBCFFE8E8E8FFE7E7
+        E7FFE8E8E8FFEAEAEAFFECECECFFEAEBEBFFE4E4E4FFDDDDDDFFCECFCEFF7272
+        72FF363636FF3A3A3AFF393939FF646464FFBFBFBFFF989898FF474747FF2B2B
+        2CFF232323FF222222FF292929FF2E2E2EFD0B0B0B9700000012000000151616
+        16AA555555FE636363FF464646FF393939FF4B4B4BFFBCBBBCFFE7E6E7FFE5E5
+        E5FFE6E6E6FFE9E9E9FFEBEBEBFFECECECFFE8E8E8FFE3E3E3FFD7D8D7FF9A9A
+        9AFF707070FF727272FF707070FF8C8C8CFFC5C5C5FF9A9A9AFF4B4B4BFF3131
+        31FF2A2A2AFF272727FF2F2F2FFF2F2F2FFC0B0B0B880000000F0000000F1414
+        148A484747F9575757FE3B3B3BFC2D2D2DFA3D3E3EFC9E9E9EFFC6C6C6FFC6C6
+        C6FFC8C8C8FFCCCCCCFFCECECEFFD1D1D1FFD1D1D1FFCFCFCFFFC9C9C9FFC0C0
+        C0FFBABABAFFB7B7B7FFB5B5B5FFB6B6B6FFB7B7B7FF848484FF414141FE3333
+        33FD2F2F2FFE2F2F2FFE303030FD212121E00505054F00000006000000030707
+        0733171717931A1A1AAC0D0D0D89070707750F0F0F942D2D2DCB393939DC3939
+        39DE3A3A3ADE3C3C3CDF3D3D3DDF3F3F3FDF3F3F3FDF404040DF3E3E3EDF3D3D
+        3DDF3C3C3CDF3C3C3CDF3B3B3BDF3B3B3BDF3A3A3ADD272727C8101010A40D0D
+        0D980C0C0C9F111111AF1010109F060606540000000F00000000000000000000
+        000300000012000000150000000C000000060000000F00000023000000320000
+        0032000000350000003500000035000000350000003500000035000000350000
+        0035000000350000003500000035000000350000003200000023000000150000
+        0012000000120000001500000012000000060000000000000000
+      }
+      Layout = blGlyphTop
+      TabOrder = 6
+    end
   end
   object MainMenu1: TMainMenu
     Images = DM_GENERAL.ImageListActs
-    left = 240
-    top = 80
+    left = 176
+    top = 304
     object MenuProgram: TMenuItem
       Caption = 'Programa'
+      object MenuItem13: TMenuItem
+        Action = prgReportEdit
+      end
       object MenuItem3: TMenuItem
         Caption = '-'
       end
@@ -115,7 +455,28 @@ object frmMain: TfrmMain
       end
     end
     object MenuItems: TMenuItem
-      Caption = 'Items'
+      Caption = 'Movimientos'
+      object MenuItem6: TMenuItem
+        Action = itemNew
+      end
+      object MenuItem9: TMenuItem
+        Action = itemEdit
+      end
+      object MenuItem10: TMenuItem
+        Action = ItemDel
+      end
+      object MenuItem7: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem8: TMenuItem
+        Action = itemSave
+      end
+      object MenuItem11: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem12: TMenuItem
+        Action = itemClose
+      end
     end
     object MenuReports: TMenuItem
       Caption = 'Listados'
@@ -123,8 +484,8 @@ object frmMain: TfrmMain
   end
   object ActionList: TActionList
     Images = DM_GENERAL.ImageListActs
-    left = 328
-    top = 80
+    left = 232
+    top = 304
     object prgExit: TAction
       Category = 'Program'
       Caption = 'Salir'
@@ -137,12 +498,81 @@ object frmMain: TfrmMain
       Caption = 'Nuevo Libro'
       Hint = 'Crea un nuevo libro de cuentas'
       ImageIndex = 1
+      OnExecute = bookNewExecute
     end
     object bookOpen: TAction
       Category = 'Book'
       Caption = 'Abrir libro'
       Hint = 'Abre un libro existente'
       ImageIndex = 2
+      OnExecute = bookOpenExecute
     end
+    object itemNew: TAction
+      Category = 'Items'
+      Caption = 'Nuevo Movimiento'
+      Hint = 'Carga un nuevo movimiento '
+      ImageIndex = 3
+      OnExecute = itemNewExecute
+      ShortCut = 113
+    end
+    object itemSave: TAction
+      Category = 'Items'
+      Caption = 'Grabar'
+      Hint = 'Graba el item cargado en el libro'
+      ImageIndex = 7
+      OnExecute = itemSaveExecute
+      ShortCut = 116
+    end
+    object itemEdit: TAction
+      Category = 'Items'
+      Caption = 'Editar Movimiento'
+      Hint = 'Modifica los datos de un movimiento cargado'
+      ImageIndex = 5
+      OnExecute = itemEditExecute
+      ShortCut = 117
+    end
+    object ItemDel: TAction
+      Category = 'Items'
+      Caption = 'Borrar Movimiento'
+      Hint = 'Elimina un movimiento del registro'
+      ImageIndex = 4
+      OnExecute = ItemDelExecute
+    end
+    object itemClose: TAction
+      Category = 'Items'
+      Caption = 'Cerrar Movimientos'
+      Hint = 'Cierra los movimientos abiertos '
+      ImageIndex = 6
+      OnExecute = itemCloseExecute
+    end
+    object prgReportEdit: TAction
+      Category = 'Program'
+      Caption = 'Modificar Listado'
+      Hint = 'Modifica la plantilla de los listados'
+      ImageIndex = 9
+    end
+  end
+  object od: TOpenDialog
+    DefaultExt = '.db3'
+    FileName = 'data.db3'
+    Filter = 'Archivos de libro|*.db3|Todos los archivos|*.*'
+    InitialDir = '.'
+    Options = [ofNoChangeDir, ofEnableSizing, ofViewDetail]
+    left = 64
+    top = 304
+  end
+  object sd: TSaveDialog
+    DefaultExt = '.db3'
+    FileName = 'data'
+    Filter = 'Archivos de libros|*.db3|Todos los archivos|*.*'
+    InitialDir = '.'
+    Options = [ofPathMustExist, ofCreatePrompt, ofEnableSizing, ofViewDetail]
+    left = 112
+    top = 304
+  end
+  object ds_Items: TDatasource
+    DataSet = DM_ITEMS.tbItems
+    left = 184
+    top = 376
   end
 end
