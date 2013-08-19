@@ -1,7 +1,7 @@
 object DM_ITEMS: TDM_ITEMS
   OnCreate = DataModuleCreate
   OldCreateOrder = False
-  Height = 551
+  Height = 646
   HorizontalOffset = 501
   VerticalOffset = 119
   Width = 416
@@ -231,6 +231,63 @@ object DM_ITEMS: TDM_ITEMS
         Name = 'itemDate'
         ParamType = ptInput
       end>
+    object qPreviousBalanceincome: TStringField
+      Alignment = taRightJustify
+      DisplayWidth = 1020
+      FieldKind = fkData
+      FieldName = 'income'
+      Index = 0
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = True
+      Required = False
+      Size = 1020
+    end
+    object qPreviousBalanceoutcome: TStringField
+      Alignment = taRightJustify
+      DisplayWidth = 1020
+      FieldKind = fkData
+      FieldName = 'outcome'
+      Index = 1
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = True
+      Required = False
+      Size = 1020
+    end
+    object qPreviousBalancebalance: TStringField
+      Alignment = taRightJustify
+      DisplayWidth = 1020
+      FieldKind = fkData
+      FieldName = 'balance'
+      Index = 2
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = True
+      Required = False
+      Size = 1020
+    end
+    object qPreviousBalancerefPayment: TLongintField
+      DisplayWidth = 10
+      FieldKind = fkData
+      FieldName = 'refPayment'
+      Index = 3
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+    end
+    object qPreviousBalancePayment: TStringField
+      DisplayWidth = 1020
+      FieldKind = fkData
+      FieldName = 'Payment'
+      Index = 4
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 1020
+    end
   end
   object tbBalance: TRxMemoryData
     Active = True
@@ -574,6 +631,137 @@ object DM_ITEMS: TDM_ITEMS
       item
         DataType = ftUnknown
         Name = 'itemDate'
+        ParamType = ptUnknown
+      end>
+  end
+  object qCurrBal: TZQuery
+    Connection = DM_GENERAL.Cnx_General
+    SQL.Strings = (
+      'SELECT SUM (itemIn) as income'
+      '           , SUM (itemOut) as outcome'
+      '           ,(SUM (itemIn) - SUM (itemOut)) as balance '
+      '           ,refPayment'
+      '           ,Payment'
+      'FROM items'
+      '           Left join gutPayments ON idPayment = refPayment'
+      'WHERE (ItemVisible = 1)'
+      '            and (itemDate = :itemDate)'
+      'GROUP By refPayment'
+    )
+    Params = <    
+      item
+        DataType = ftDateTime
+        Name = 'itemDate'
+        ParamType = ptInput
+      end>
+    left = 176
+    top = 215
+    ParamData = <    
+      item
+        DataType = ftDateTime
+        Name = 'itemDate'
+        ParamType = ptInput
+      end>
+    object qCurrBalincome: TStringField
+      Alignment = taRightJustify
+      DisplayWidth = 1020
+      FieldKind = fkData
+      FieldName = 'income'
+      Index = 0
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = True
+      Required = False
+      Size = 1020
+    end
+    object qCurrBaloutcome: TStringField
+      Alignment = taRightJustify
+      DisplayWidth = 1020
+      FieldKind = fkData
+      FieldName = 'outcome'
+      Index = 1
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = True
+      Required = False
+      Size = 1020
+    end
+    object qCurrBalbalance: TStringField
+      Alignment = taRightJustify
+      DisplayWidth = 1020
+      FieldKind = fkData
+      FieldName = 'balance'
+      Index = 2
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = True
+      Required = False
+      Size = 1020
+    end
+    object qCurrBalrefPayment: TLongintField
+      DisplayWidth = 10
+      FieldKind = fkData
+      FieldName = 'refPayment'
+      Index = 3
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+    end
+    object qCurrBalPayment: TStringField
+      DisplayWidth = 1020
+      FieldKind = fkData
+      FieldName = 'Payment'
+      Index = 4
+      LookupCache = False
+      ProviderFlags = [pfInUpdate, pfInWhere]
+      ReadOnly = False
+      Required = False
+      Size = 1020
+    end
+  end
+  object qItemsRange: TZQuery
+    Connection = DM_GENERAL.Cnx_General
+    SQL.Strings = (
+      'SELECT idItem '
+      '            ,itemDate'
+      '            ,itemDescription'
+      '            ,ItemIn'
+      '            ,ItemOut      '
+      '            ,(itemIn - itemOut) as ItemBalance'
+      '           ,refPayment'
+      '           , itemClosed  '
+      '           ,Payment'
+      '           ,shortref'
+      'FROM items'
+      '           Left join gutPayments ON idPayment = refPayment'
+      'WHERE (itemVisible = 1)'
+      '            and (itemDate >=  :dateIni)'
+      '            and  (itemDate <=  :dateEnd)'
+      'ORDER BY idItem'
+    )
+    Params = <    
+      item
+        DataType = ftUnknown
+        Name = 'dateIni'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'dateEnd'
+        ParamType = ptUnknown
+      end>
+    left = 48
+    top = 512
+    ParamData = <    
+      item
+        DataType = ftUnknown
+        Name = 'dateIni'
+        ParamType = ptUnknown
+      end    
+      item
+        DataType = ftUnknown
+        Name = 'dateEnd'
         ParamType = ptUnknown
       end>
   end

@@ -5,14 +5,19 @@ unit dmgeneral;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, ZConnection, ZDataset, Controls
-  ,StdCtrls;
+  Classes, SysUtils, FileUtil, LR_Class, LR_Desgn, LR_DBSet, ZConnection,
+  ZDataset, Controls, StdCtrls
+  ,db
+  ;
 
 type
 
   { TDM_GENERAL }
 
   TDM_GENERAL = class(TDataModule)
+    frDBReport: TfrDBDataSet;
+    frDesigner1: TfrDesigner;
+    frReport: TfrReport;
     ImageListActs: TImageList;
     Cnx_General: TZConnection;
     gutPayments: TZQuery;
@@ -23,6 +28,11 @@ type
     procedure FillComboBox (var aComboBox: TComboBox; fieldVisible, fieldIndex: string; var DataQuery: TZQuery);
     function GetCbId (var aComboBox: TComboBox): integer;
     function GetCbKey (var aComboBox: TComboBox; idx: integer): integer;
+
+    procedure EditReport;
+    procedure SetReport(aReport: string; aDataset: TDataSet);
+    procedure addVarReport(aVar, aValue: string);
+    procedure RunReport;
   end;
 
 var
@@ -84,6 +94,36 @@ begin
    DEC (i);
  end;
  Result:= retVal;
+end;
+
+
+(*******************************************************************************
+**** REPORT FUNCTIONS
+*******************************************************************************)
+
+procedure TDM_GENERAL.EditReport;
+begin
+  frReport.DesignReport;
+end;
+
+
+procedure TDM_General.addVarReport(aVar, aValue: string);
+begin
+  frVariables [aVar]:= aValue;
+end;
+
+procedure TDM_General.SetReport(aReport: string; aDataset: TDataSet);
+begin
+  with frReport do
+  begin
+    LoadFromFile(aReport);
+    frDBReport.DataSet:= aDataset;
+  end;
+end;
+
+procedure TDM_General.RunReport;
+begin
+  frReport.ShowReport;
 end;
 
 end.

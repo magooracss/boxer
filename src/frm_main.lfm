@@ -84,6 +84,16 @@ object frmMain: TfrmMain
       Caption = 'ToolButton7'
       Style = tbsSeparator
     end
+    object ToolButton8: TToolButton
+      Left = 392
+      Top = 2
+      Action = repBalances
+    end
+    object ToolButton9: TToolButton
+      Left = 461
+      Top = 2
+      Action = repItems
+    end
   end
   object DBGrid1: TDBGrid
     Left = 0
@@ -480,6 +490,12 @@ object frmMain: TfrmMain
     end
     object MenuReports: TMenuItem
       Caption = 'Listados'
+      object MenuItem14: TMenuItem
+        Action = repBalances
+      end
+      object MenuItem15: TMenuItem
+        Action = repItems
+      end
     end
   end
   object ActionList: TActionList
@@ -550,6 +566,21 @@ object frmMain: TfrmMain
       Caption = 'Modificar Listado'
       Hint = 'Modifica la plantilla de los listados'
       ImageIndex = 9
+      OnExecute = prgReportEditExecute
+    end
+    object repBalances: TAction
+      Category = 'Reports'
+      Caption = 'Saldos'
+      Hint = 'Muestra los saldos'
+      ImageIndex = 10
+      OnExecute = repBalancesExecute
+    end
+    object repItems: TAction
+      Category = 'Reports'
+      Caption = 'Movimientos'
+      Hint = 'Lista los movimientos entre dos fechas'
+      ImageIndex = 11
+      OnExecute = repItemsExecute
     end
   end
   object od: TOpenDialog

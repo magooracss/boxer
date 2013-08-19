@@ -5,21 +5,36 @@ unit dmitems;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, rxmemds, ZDataset, ZSqlUpdate
+  Classes, SysUtils, FileUtil, rxmemds, ZDataset
   ,dmgeneral, db
   ;
 
 const
   NEW_ID = -1;
+  REP_RANGE = '.\itemsrange.lrf';
+
+
 type
 
   { TDM_ITEMS }
 
   TDM_ITEMS = class(TDataModule)
+    qCurrBalbalance: TStringField;
+    qCurrBalincome: TStringField;
+    qCurrBaloutcome: TStringField;
+    qCurrBalPayment: TStringField;
+    qCurrBalrefPayment: TLongintField;
     qItemClose: TZQuery;
     qItemEdit: TZQuery;
     qItemDel: TZQuery;
     qItemsDate: TZQuery;
+    qCurrBal: TZQuery;
+    qItemsRange: TZQuery;
+    qPreviousBalancebalance: TStringField;
+    qPreviousBalanceincome: TStringField;
+    qPreviousBalanceoutcome: TStringField;
+    qPreviousBalancePayment: TStringField;
+    qPreviousBalancerefPayment: TLongintField;
     tbBalance: TRxMemoryData;
     tbBalanceBalance: TFloatField;
     tbBalanceIncome: TFloatField;
@@ -48,6 +63,7 @@ type
   public
     function previousbalance (aDate: TDateTime): double;
     function GetBalance(aDate: TDateTime): double;
+    function BalanceADay (aDAte: TDate): double;
     procedure GetItems (aDate: TDateTime);
     procedure SaveItem(idItem: integer
                        ;itemDate: TDate
@@ -65,6 +81,8 @@ type
     procedure DelCurrItem;
 
     procedure ItemClose (aDate: TDate);
+
+    procedure RepItemsRange (dateIni, dateEnd: TDate);
 
   end;
 
@@ -145,8 +163,8 @@ function TDM_ITEMS.GetBalance(aDate: TDateTime): double;
 var
   prevBal, total: Double;
 begin
-
   prevBal:= previousbalance(aDate);
+
 
   if tbItems.RecordCount < 1 then
     GetItems(aDate);
@@ -164,6 +182,28 @@ begin
     EnableControls;
     Result:= total + prevBal;
   end;
+end;
+
+function TDM_ITEMS.BalanceADay(aDAte: TDate): double;
+var
+  total: Double;
+begin
+  total:= 0;
+
+  with qCurrBal do
+  begin
+    if active then close;
+    ParamByName('itemDate').AsDate:= aDate;
+    Open;
+
+    while not eof do
+    begin
+      total:= total + qCurrBalbalance.asFloat;
+      Next;
+    end;
+  end;
+
+  Result:= total;
 end;
 
 procedure TDM_ITEMS.GetItems(aDate: TDateTime);
@@ -257,6 +297,21 @@ begin
     ParamByName('itemDate').AsDate:= aDate;
     ExecSQL;
   end;
+end;
+
+procedure TDM_ITEMS.RepItemsRange(dateIni, dateEnd: TDate);
+begin
+  with qItemsRange do
+  begin
+    if active then close;
+    ParamByName('dateIni').asDate:= dateIni;
+    ParamByName('dateEnd').AsDate:= dateEnd;
+    Open;
+  end;
+
+  DM_GENERAL.SetReport(REP_RANGE ,qItemsRange);
+  DM_GENERAL.addVarReport('BAL_PREV', FormatFloat('$ ##########0.00', previousbalance(dateIni)));
+  DM_GENERAL.RunReport;
 end;
 
 end.

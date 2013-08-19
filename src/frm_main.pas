@@ -16,6 +16,10 @@ type
   { TfrmMain }
 
   TfrmMain = class(TForm)
+    MenuItem15: TMenuItem;
+    repItems: TAction;
+    MenuItem14: TMenuItem;
+    repBalances: TAction;
     MenuItem13: TMenuItem;
     prgReportEdit: TAction;
     itemClose: TAction;
@@ -66,6 +70,8 @@ type
     ToolButton5: TToolButton;
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
+    ToolButton9: TToolButton;
     procedure bookNewExecute(Sender: TObject);
     procedure bookOpenExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -76,6 +82,9 @@ type
     procedure itemNewExecute(Sender: TObject);
     procedure itemSaveExecute(Sender: TObject);
     procedure prgExitExecute(Sender: TObject);
+    procedure prgReportEditExecute(Sender: TObject);
+    procedure repBalancesExecute(Sender: TObject);
+    procedure repItemsExecute(Sender: TObject);
   private
     aBook: TBook;
     currItem: integer; //Fix this!!!
@@ -95,6 +104,8 @@ implementation
 uses
   classconfig
   ,dmitems
+  ,frm_balances
+  ,frm_daterange
   ;
 
 const
@@ -178,12 +189,52 @@ end;
 
 procedure TfrmMain.itemSaveExecute(Sender: TObject);
 begin
-  SaveItem;
+  if TRIM(edDescription.Text) <> EmptyStr then
+    SaveItem
+  else
+  begin
+    ShowMessage('Falta ingresar la descripción');
+    edDescription.SetFocus;
+  end;
+
 end;
 
 procedure TfrmMain.prgExitExecute(Sender: TObject);
 begin
   Application.Terminate;
+end;
+
+procedure TfrmMain.prgReportEditExecute(Sender: TObject);
+begin
+  DM_GENERAL.EditReport;
+end;
+
+procedure TfrmMain.repBalancesExecute(Sender: TObject);
+var
+  scr_Bal: TfrmBalances;
+begin
+ scr_Bal:= TfrmBalances.Create(self);
+ try
+   scr_Bal.ShowModal;
+ finally
+   scr_Bal.Free;
+ end;
+end;
+
+procedure TfrmMain.repItemsExecute(Sender: TObject);
+var
+  scr_dateRange: TfrmDateRange;
+begin
+  scr_dateRange:= TfrmDateRange.Create(self);
+  try
+    if scr_dateRange.ShowModal = mrOK then
+    begin
+      DM_ITEMS.RepItemsRange(scr_dateRange.DateInit
+                            ,scr_dateRange.DateEnd);
+    end;
+  finally
+    scr_dateRange.Free;
+  end;
 end;
 
 procedure TfrmMain.openFileBook(filepath: string);
