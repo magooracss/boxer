@@ -25,7 +25,7 @@ AllowNoIcons=yes
 LicenseFile=R:\Trabajo\programas\boxer\LICENSE
 ;InfoAfterFile=R:\Trabajo\programas\boxer\README.md
 OutputDir=R:\Trabajo\programas\boxer\inst\1-0-0
-OutputBaseFilename=instalador
+OutputBaseFilename=instaladorBoxer
 Compression=lzma
 SolidCompression=yes
 

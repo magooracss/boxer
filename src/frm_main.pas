@@ -121,8 +121,12 @@ begin
 
   fpath:= LeerDato(SECT_BOOK, BOOK_OPEN);
   if FileExists(fpath) then
-    openFileBook(fpath);
-
+    openFileBook(fpath)
+  else
+    if (MessageDlg ('AVISO', 'No encuentro un libro en uso. Desea crear uno nuevo?', mtConfirmation, [mbYes, mbNo],0 ) = mrYes) then
+    begin
+      bookNew.Execute;
+    end;
 end;
 
 procedure TfrmMain.FormDestroy(Sender: TObject);

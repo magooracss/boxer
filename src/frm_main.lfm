@@ -289,7 +289,6 @@ object frmMain: TfrmMain
       Width = 238
       ItemHeight = 16
       TabOrder = 5
-      Text = 'cbPayment'
     end
     object Label1: TLabel
       Left = 280
