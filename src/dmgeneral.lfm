@@ -1555,7 +1555,6 @@ object DM_GENERAL: TDM_GENERAL
     Properties.Strings = (
       'PreprepareSQL='
     )
-    Connected = True
     Port = 0
     Database = 'R:\Trabajo\programas\boxer\exe\masterdata.db'
     Protocol = 'sqlite-3'
