@@ -25,6 +25,11 @@ object frmMain: TfrmMain
     Panels = <    
       item
         Width = 500
+      end    
+      item
+        Bevel = pbNone
+        Text = '   http://www.racss.com.ar  -  desarrollo@racss.com.ar'
+        Width = 50
       end>
     SimplePanel = False
   end
