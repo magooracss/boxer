@@ -18,7 +18,8 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="44"/>
+      <MinorVersionNr Value="1"/>
+      <BuildNr Value="47"/>
       <Language Value="040A"/>
       <StringTable CompanyName="RACSS Programacion" InternalName="Boxer" LegalCopyright="www.racss.com.ar" LegalTrademarks="Carlos Enrique Rodriguez" ProductVersion=""/>
     </VersionInfo>

@@ -15,6 +15,7 @@ object frmMain: TfrmMain
   Menu = MainMenu1
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnShow = FormShow
   Position = poScreenCenter
   LCLVersion = '1.0.4.0'
   object stInfo: TStatusBar

@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "Boxer"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "RACSS Programación"
 #define MyAppURL "http://www.racss.com.ar/"
 #define MyAppExeName "boxer.exe"
@@ -23,9 +23,9 @@ DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 LicenseFile=R:\Trabajo\programas\boxer\LICENSE
-;InfoAfterFile=R:\Trabajo\programas\boxer\README.md
-OutputDir=R:\Trabajo\programas\boxer\inst\1-0-0
-OutputBaseFilename=instaladorBoxer
+InfoBeforeFile=R:\Trabajo\programas\boxer\exe\cambios.txt
+OutputDir=R:\Trabajo\programas\boxer\inst\1-1-0
+OutputBaseFilename=instaladorBoxer  
 Compression=lzma
 SolidCompression=yes
 
@@ -42,6 +42,9 @@ Source: "R:\Trabajo\programas\boxer\exe\boxer.cfg"; DestDir: "{app}"; Flags: ign
 Source: "R:\Trabajo\programas\boxer\exe\itemsrange.lrf"; DestDir: "{app}"; Flags: ignoreversion
 Source: "R:\Trabajo\programas\boxer\exe\masterdata.db"; DestDir: "{app}"; Flags: ignoreversion
 Source: "R:\Trabajo\programas\boxer\exe\sqlite3.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "R:\Trabajo\programas\boxer\exe\cambios.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "R:\Trabajo\programas\boxer\LICENSE"; DestDir: "{app}"; Flags: ignoreversion
+
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

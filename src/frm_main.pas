@@ -76,6 +76,7 @@ type
     procedure bookOpenExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure itemCloseExecute(Sender: TObject);
     procedure ItemDelExecute(Sender: TObject);
     procedure itemEditExecute(Sender: TObject);
@@ -114,24 +115,30 @@ const
 { TfrmMain }
 
 procedure TfrmMain.FormCreate(Sender: TObject);
-var
-  fpath: string;
 begin
-  aBook:= TBook.Create;
 
-  fpath:= LeerDato(SECT_BOOK, BOOK_OPEN);
-  if FileExists(fpath) then
-    openFileBook(fpath)
-  else
-    if (MessageDlg ('AVISO', 'No encuentro un libro en uso. Desea crear uno nuevo?', mtConfirmation, [mbYes, mbNo],0 ) = mrYes) then
-    begin
-      bookNew.Execute;
-    end;
 end;
 
 procedure TfrmMain.FormDestroy(Sender: TObject);
 begin
   aBook.Free;
+end;
+
+procedure TfrmMain.FormShow(Sender: TObject);
+  var
+    fpath: string;
+  begin
+    aBook:= TBook.Create;
+
+    fpath:= LeerDato(SECT_BOOK, BOOK_OPEN);
+    if FileExists(fpath) then
+      openFileBook(fpath)
+    else
+      if (MessageDlg ('AVISO', 'No encuentro un libro en uso. Desea crear uno nuevo?', mtConfirmation, [mbYes, mbNo],0 ) = mrYes) then
+      begin
+        bookNew.Execute;
+      end;
+
 end;
 
 procedure TfrmMain.itemCloseExecute(Sender: TObject);

@@ -1556,7 +1556,7 @@ object DM_GENERAL: TDM_GENERAL
       'PreprepareSQL='
     )
     Port = 0
-    Database = 'R:\Trabajo\programas\boxer\exe\masterdata.db'
+    Database = 'c:\racss\caja.db3'
     Protocol = 'sqlite-3'
     left = 168
     top = 24
